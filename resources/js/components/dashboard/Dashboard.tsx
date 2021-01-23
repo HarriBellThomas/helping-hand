@@ -2,6 +2,7 @@ import { AppProvider, Frame, Navigation, TopBar } from "@shopify/polaris";
 import { ArrowLeftMinor, ConversationMinor, HomeMajor, OrdersMajor } from "@shopify/polaris-icons";
 import React from "react";
 import { Component } from "react";
+import HelpingMap from "./HelpingMap";
 import NewDashboard from "./NewDashboard";
 
 
@@ -69,7 +70,7 @@ class Dashboard extends Component {
                         showMobileNavigation={false}
                         onNavigationDismiss={() => {}}
                     >
-                        <NewDashboard/>
+                        <HelpingMap/>
                     </Frame>
                 </AppProvider>
             </div>
