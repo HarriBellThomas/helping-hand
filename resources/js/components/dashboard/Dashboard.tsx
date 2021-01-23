@@ -1,65 +1,21 @@
 import { AppProvider, Frame, Navigation, Modal, TopBar, TextContainer, FormLayout, TextField } from "@shopify/polaris";
 import { ArrowLeftMinor, ConversationMinor, CustomersMajor, HomeMajor, OrdersMajor } from "@shopify/polaris-icons";
 import React from "react";
-import { Component, useState} from "react";
-import { IDashboardProps, IJobDefinition } from "../../interfaces/dashboard.interfaces";
+import { Component } from "react";
+import { IDashboardProps } from "../../interfaces/dashboard.interfaces";
 import HelpingMap from "./HelpingMap";
-import axios from 'axios';
 
-class IDashboardState {
 
+interface IDashboardState {
+  showAccountDialog: boolean,
 }
 
 
 class Dashboard extends Component<IDashboardProps, IDashboardState> {
 
-
-    private getJobs = () => {
-      axios.post(`/api/get-jobs.json`, {
-        lat: 0.0,
-        long: 0.0,
-        radius: 5,
-      }).then(res => {
-        const status = res.status;
-        if (status == 200) {
-            const obj = res.data;
-            if ("success" in obj && obj["success"]) {
-                const jobs: IJobDefinition[] = obj["payload"]["jobs"] as IJobDefinition[];
-                if (jobs) {
-                    console.log(jobs);
-                } else {
-                    console.log("Damn...");
-                }
-                return;
-            }
-            console.log("Damn...");
-            return;
-        }
-      });
-    }
-
     state = {
       showAccountDialog: false,
     }
-
-    private userMenuMarkup = (
-        <TopBar.UserMenu
-          actions={[]}
-          name="Harri"
-          detail={"testing"}
-          initials="H"
-          open={false}
-          onToggle={() => {}}
-        />
-      );
-
-    private topBarMarkup = (
-        <TopBar
-          showNavigationToggle
-          userMenu={this.userMenuMarkup}
-          onNavigationToggle={() => {}}
-        />
-      );
 
     private navigationMarkup = (
       
@@ -88,7 +44,6 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
       );
       
     render() {
-        this.getJobs();
         return (
             <div style={{height: '100%'}}>
                 <AppProvider
@@ -101,12 +56,15 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                     features={{newDesignLanguage: true}}
                 >
                     <Frame
-                        // topBar={this.topBarMarkup}
                         navigation={this.navigationMarkup}
                         showMobileNavigation={false}
                         onNavigationDismiss={() => {}}
                     >
-                        <HelpingMap/>
+                        <HelpingMap
+                          latitude={52.2043}
+                          longitude={0.1196}
+                          radius={5}
+                        />
                     </Frame>
 
                     <Modal

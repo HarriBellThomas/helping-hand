@@ -84,8 +84,8 @@ class Dashboard extends Controller
                 "jobs" => array(
                     [
                         "id" => "_1",
-                        "lat" => 0.0,
-                        "long" => 0.0,
+                        "lat" => 52.2087, 
+                        "long" => 0.1149,
                         "summary" => "Mow my lawn, bitches",                        
                         "description" => "This is something...",
                         "owner_name" => "Harri",
@@ -97,8 +97,8 @@ class Dashboard extends Controller
                     ],
                     [
                         "id" => "_2",
-                        "lat" => 0.01,
-                        "long" => 0.01,
+                        "lat" => 52.209120, 
+                        "long" => 0.123199,
                         "summary" => "Mow my lawn, bitches: the sequel",                        
                         "description" => "This is something...",
                         "owner_name" => "Harri",
