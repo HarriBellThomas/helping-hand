@@ -135,9 +135,9 @@ class Dashboard extends Controller
             $job->setAttribute("completion_target_1", $request->get("completion_target_1"));
             $job->setAttribute("completion_target_2", $request->get("completion_target_2"));
 
-            // Infer jobs.
+            // Infer job metadata.
             $job->setAttribute("owner_id", Auth::user()->sub);
-            $job->setAttribute("created", 0);
+            $job->setAttribute("created", time());
             $job->setAttribute("status", "pending");
 
             // Save job.

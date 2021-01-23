@@ -13,6 +13,9 @@
                 integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
                 crossorigin=""></script>
         <link rel="shortcut icon" type="image/png" href="{{ asset('images/favicon.png') }}"/>
+
+        <link rel="preconnect" href="https://fonts.gstatic.com"> 
+        <link href="https://fonts.googleapis.com/css2?family=Volkorn:wght@300;400;700&display=swap" rel="stylesheet">
     </head>
     <body>
         @yield('content')
