@@ -7,5 +7,5 @@ export interface IDashboardProps {
 }
 
 export interface IJobDefinition {
-    
+
 }
