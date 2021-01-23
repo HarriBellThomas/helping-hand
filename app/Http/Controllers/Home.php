@@ -11,25 +11,25 @@ class Home extends Controller
         return view('frontpages/index');
     }
 
-    public function apply() {
-        if(Auth::check()) {
-            $dashboard_url = route("dashboard_index", array(), false);
-            return redirect($dashboard_url . "/apply/individual");
-        }
-        return view('frontpages/apply', ['open' => Dashboard::areApplicationsOpen()]);
-    }
+    // public function apply() {
+    //     if(Auth::check()) {
+    //         $dashboard_url = route("dashboard_index", array(), false);
+    //         return redirect($dashboard_url . "/apply/individual");
+    //     }
+    //     return view('frontpages/apply', ['open' => Dashboard::areApplicationsOpen()]);
+    // }
 
-    public function conduct() {
-        return view('frontpages/conduct');
-    }
+    // public function conduct() {
+    //     return view('frontpages/conduct');
+    // }
 
-    public function privacy() {
-        return view('frontpages/privacy');
-    }
+    // public function privacy() {
+    //     return view('frontpages/privacy');
+    // }
 
-    public function terms() {
-        return view('frontpages/terms');
-    }
+    // public function terms() {
+    //     return view('frontpages/terms');
+    // }
 
  	// public function about() {
 	// 	return view('about');

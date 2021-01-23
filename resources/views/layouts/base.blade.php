@@ -9,24 +9,6 @@
         <link rel="shortcut icon" type="image/png" href="{{ asset('images/favicon.png') }}"/>
     </head>
     <body>
-        @env('production')
-            <!-- Running in production mode. -->
-        @elseenv('staging')
-            <div class="env-banner"  style="background-color: #3b7b00;">STAGING</div>
-        @elseenv('development')
-            <div class="env-banner" style="background-color: #bd0000;">DEVELOPMENT</div>
-        @endenv
-
         @yield('content')
     </body>
-            
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153422761-1"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-153422761-1');
-    </script>
 </html>

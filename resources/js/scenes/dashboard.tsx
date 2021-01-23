@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from "react-dom";
 import axios from "axios";
 import { IDashboardProps } from "../interfaces/dashboard.interfaces";
-import Dashboard from '../components/dashboard/Dashboard';
+import Dashboard from '../components/dashboard/Dashboard404';
 import { BrowserRouter } from 'react-router-dom';
 
 if (document.getElementById('dashboard-root')) {
@@ -21,7 +21,7 @@ function initialise(root: HTMLElement) {
                 const payload: IDashboardProps = obj["payload"];
                 ReactDOM.render(
                     <BrowserRouter>
-                        <Dashboard {...payload} />
+                        <Dashboard404 {...payload} />
                     </BrowserRouter>,
                     root);
 
