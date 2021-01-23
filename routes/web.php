@@ -60,9 +60,9 @@ Route::middleware(['auth.check_staging'])->group(function() {
 
     // Private API
     Route::get('/api/{path}.json', 'Dashboard@api_get')->name('dashboard_api_get');
-    // Route::middleware(['verifyCsrf'])
-    //     ->post('/api/{path}.json', 'Dashboard@api_post')
-    //     ->name('dashboard_api_post');
+    Route::middleware(['verifyCsrf'])
+        ->post('/api/{path}.json', 'Dashboard@api_post')
+        ->name('dashboard_api_post');
 
     // Protected routes - login will be forced.
     // Route::middleware(['auth', 'type:hacker'])->group(function () {

@@ -5,3 +5,7 @@ export interface IDashboardProps {
         picture: string,
     }
 }
+
+export interface IJobDefinition {
+    
+}
