@@ -956,10 +956,10 @@
     hsluv "^0.1.0"
     tslib "^1.14.1"
 
-"@shopify/polaris@^5.9.1":
-  version "5.13.1"
-  resolved "https://registry.yarnpkg.com/@shopify/polaris/-/polaris-5.13.1.tgz#f5e5ab2523be0580fc2aedd7ea90718fc014536f"
-  integrity sha512-vnpced7JsBlDbKEdfPObat7tQZOfuB72ET6TW4knZuO9wznSqmYZUOPgBu5NV7o0sMBdU9ECAv1Vzj5TzqGNZw==
+"@shopify/polaris@^5.13.1":
+  version "5.15.0"
+  resolved "https://registry.yarnpkg.com/@shopify/polaris/-/polaris-5.15.0.tgz#b31053b7cb10e071995591fa55766845f10d6c55"
+  integrity sha512-0CCj2+RDDt7irwS0RaQbGryDrRRca0aEc6SRhgQJW/+W8KHkCgMS1FL1dL3ZQG64yIy30KWT6qG8IrPp99MEXw==
   dependencies:
     "@shopify/polaris-icons" "^4.1.0"
     "@shopify/polaris-tokens" "^2.16.0"
