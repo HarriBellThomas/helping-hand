@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-import { AppProvider, Page, Card, Button } from "@shopify/polaris";
+import { AppProvider, Page, Card } from "@shopify/polaris";
+import HelpingMap from "../HelpingMap";
+import ContainerDimensions from "react-container-dimensions";
 
 class NewDashboard extends Component {
     render() {
@@ -7,7 +9,7 @@ class NewDashboard extends Component {
             <AppProvider i18n={{}}>
                 <Page title="Example app">
                     <Card sectioned>
-                        <Button onClick={() => alert('Button clicked!')}>Example button</Button>
+                        <HelpingMap/>
                     </Card>
                 </Page>
             </AppProvider>
