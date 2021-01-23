@@ -82,9 +82,32 @@ class Dashboard extends Controller
         if (Auth::check() && $this->hasParameters($request, $required)) {
             return $this->response(true, [
                 "jobs" => array(
-                    ["id" => "_1", "lat" => 0.0, "long" => 0.0, "name" => "Task 1", "description" => "This is something...", "author" => "Harri"],
-                    ["id" => "_2", "lat" => 0.01, "long" => 0.01, "name" => "Task 2", "description" => "This is something...", "author" => "Harri"],
-                    ["id" => "_3", "lat" => 0.02, "long" => 0.02, "name" => "Task 3", "description" => "This is something...", "author" => "Harri"],
+                    [
+                        "id" => "_1",
+                        "lat" => 0.0,
+                        "long" => 0.0,
+                        "summary" => "Mow my lawn, bitches",                        
+                        "description" => "This is something...",
+                        "owner_name" => "Harri",
+                        "owner_id" => "harri",
+                        "created" => 1611436310,
+                        "completion_target_1" => 1611436320,
+                        "completion_target_2" => 1611436330,
+                        "status" => "pending"
+                    ],
+                    [
+                        "id" => "_2",
+                        "lat" => 0.01,
+                        "long" => 0.01,
+                        "summary" => "Mow my lawn, bitches: the sequel",                        
+                        "description" => "This is something...",
+                        "owner_name" => "Harri",
+                        "owner_id" => "harri",
+                        "created" => 1611436315,
+                        "completion_target_1" => 1611436325,
+                        "completion_target_2" => 1611436335,
+                        "status" => "pending"
+                    ],
                 )
             ]);
         }
