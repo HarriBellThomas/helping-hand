@@ -4,6 +4,7 @@ import axios from "axios";
 import { IDashboardProps } from "../interfaces/dashboard.interfaces";
 import { BrowserRouter } from 'react-router-dom';
 import NewDashboard from '../components/dashboard/NewDashboard';
+import Dashboard from '../components/dashboard/Dashboard';
 
 if (document.getElementById('dashboard-root')) {
     const element = document.getElementById('dashboard-root')
@@ -15,9 +16,15 @@ function initialise(root: HTMLElement) {
     console.log("Initialising Dashboard...");
     ReactDOM.render(
         <BrowserRouter>
-            <NewDashboard/>
+            <Dashboard/>
         </BrowserRouter>,
-        root);
+    root);
+
+    const loadingElement = document.getElementById('loading');
+    if (loadingElement) {
+        loadingElement.remove();
+    }
+
     // axios.get(`/dashboard-api/init.json`).then(res => {
     //     const status = res.status;
     //     if (status == 200) {
