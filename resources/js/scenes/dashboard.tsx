@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from "react-dom";
 import axios from "axios";
 import { IDashboardProps } from "../interfaces/dashboard.interfaces";
-import Dashboard from '../components/dashboard/Dashboard404';
 import { BrowserRouter } from 'react-router-dom';
+import NewDashboard from '../components/dashboard/NewDashboard';
 
 if (document.getElementById('dashboard-root')) {
     const element = document.getElementById('dashboard-root')
@@ -13,28 +13,33 @@ if (document.getElementById('dashboard-root')) {
 
 function initialise(root: HTMLElement) {
     console.log("Initialising Dashboard...");
-    axios.get(`/dashboard-api/init.json`).then(res => {
-        const status = res.status;
-        if (status == 200) {
-            const obj = res.data;
-            if ("success" in obj && obj["success"]) {
-                const payload: IDashboardProps = obj["payload"];
-                ReactDOM.render(
-                    <BrowserRouter>
-                        <Dashboard404 {...payload} />
-                    </BrowserRouter>,
-                    root);
+    ReactDOM.render(
+        <BrowserRouter>
+            <NewDashboard/>
+        </BrowserRouter>,
+        root);
+    // axios.get(`/dashboard-api/init.json`).then(res => {
+    //     const status = res.status;
+    //     if (status == 200) {
+    //         const obj = res.data;
+    //         if ("success" in obj && obj["success"]) {
+    //             const payload: IDashboardProps = obj["payload"];
+    //             ReactDOM.render(
+    //                 <BrowserRouter>
+    //                     <NewDashboard {...payload} />
+    //                 </BrowserRouter>,
+    //                 root);
 
-                const loadingElement = document.getElementById('loading');
-                if (loadingElement) {
-                    loadingElement.remove();
-                }
-            }
-        } else {
-            console.log(`Status: ${status}`);
-            console.log(res.data);
-        }
-    })
+    //             const loadingElement = document.getElementById('loading');
+    //             if (loadingElement) {
+    //                 loadingElement.remove();
+    //             }
+    //         }
+    //     } else {
+    //         console.log(`Status: ${status}`);
+    //         console.log(res.data);
+    //     }
+    // })
 }
 
 /**
