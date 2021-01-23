@@ -2,10 +2,15 @@ import { AppProvider, Frame, Navigation, Modal, TopBar, TextContainer, FormLayou
 import { ArrowLeftMinor, ConversationMinor, CustomersMajor, HomeMajor, OrdersMajor } from "@shopify/polaris-icons";
 import React from "react";
 import { Component, useState} from "react";
+import { IDashboardProps } from "../../interfaces/dashboard.interfaces";
 import HelpingMap from "./HelpingMap";
 
+class IDashboardState {
 
-class Dashboard extends Component {
+}
+
+
+class Dashboard extends Component<IDashboardProps, IDashboardState> {
 
     state = {
       showAccountDialog: false,

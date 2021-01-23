@@ -23,7 +23,6 @@ class CustomUserRepository extends Auth0UserRepository
      */
     protected function upsertUser($profile)
     {
-
         // See if we have a user that matches the Auth0 user_id
         $user = User::where('sub', $profile['sub'])->first();
 
@@ -31,36 +30,17 @@ class CustomUserRepository extends Auth0UserRepository
         if (!$user) {
             $user = new User();
             $user->setAttribute('sub', $profile['sub']);
-            $sub_parts = explode("|", $profile['sub']);
-            $type = ($sub_parts[0] == "email") ? "sponsor" :
-                (($sub_parts[1] == "MyMLH") ? "hacker" :
-                (($sub_parts[0] == "google-apps" && strpos($sub_parts[1], "@hackcambridge.com") !== false)
-                    ? "committee" : "unknown"));
-            $user->setAttribute('type', $type);
-            $user->setAttribute('profile', '{}');
-
-            if($type == 'hacker') {
-                throw new UnauthorizedException("Applications have closed");
-            }
         }
 
-        if ($user->type == "sponsor" || $user->type == "sponsor-reviewer") {
-            $sponsor = DB::table("sponsor_agents")
-                ->where("email", "=", $user->email)
-                ->join("sponsors", "sponsors.id", "=", "sponsor_agents.sponsor_id")->select("privileges")->first();
-            if ($sponsor && strpos($sponsor->privileges, "reviewing")) {
-                $user->setAttribute('type', "sponsor-reviewer");
-            } else {
-                $user->setAttribute('type', "sponsor");
-            }
-        }
-
-        $user->setAttribute('email', isset($profile['email']) ? $profile['email'] : '');
-        $user->setAttribute('name', isset($profile['name']) ? $profile['name'] : '');
-
-        $payload = $this->getAuth0UserInformation($profile['sub']);
-        if ($payload) {
-            $user->setAttribute('profile', $payload);
+        $attributes = [
+            "email",
+            "given_name",
+            "family_name",
+            "name",
+            "picture",
+        ];
+        foreach($attributes as $attribute) {
+            $user->setAttribute($attribute, isset($profile[$attribute]) ? $profile[$attribute] : '');
         }
 
         $user->save();

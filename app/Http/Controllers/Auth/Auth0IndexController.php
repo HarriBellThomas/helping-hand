@@ -15,7 +15,7 @@ class Auth0IndexController extends Controller
      * @param string $driver
      * @return mixed
      */
-    public function login($driver = "mymlh")
+    public function login($driver = "facebook")
     {
         \Firebase\JWT\JWT::$leeway = 60;
         $authorize_params = [
