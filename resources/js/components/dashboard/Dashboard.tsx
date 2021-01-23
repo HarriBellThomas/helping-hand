@@ -2,11 +2,15 @@ import { AppProvider, Frame, Navigation, TopBar } from "@shopify/polaris";
 import { ArrowLeftMinor, ConversationMinor, HomeMajor, OrdersMajor } from "@shopify/polaris-icons";
 import React from "react";
 import { Component } from "react";
+import { IDashboardProps } from "../../interfaces/dashboard.interfaces";
 import HelpingMap from "./HelpingMap";
-import NewDashboard from "./NewDashboard";
+
+class IDashboardState {
+
+}
 
 
-class Dashboard extends Component {
+class Dashboard extends Component<IDashboardProps, IDashboardState> {
 
     private userMenuMarkup = (
         <TopBar.UserMenu

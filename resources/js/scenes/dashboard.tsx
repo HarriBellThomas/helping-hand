@@ -14,44 +14,33 @@ if (document.getElementById('dashboard-root')) {
 
 function initialise(root: HTMLElement) {
     console.log("Initialising Dashboard...");
-    ReactDOM.render(
-        <BrowserRouter>
-            <Dashboard/>
-        </BrowserRouter>,
-    root);
 
-    const loadingElement = document.getElementById('loading');
-    if (loadingElement) {
-        loadingElement.remove();
-    }
+    axios.get(`/api/init.json`).then(res => {
+        const status = res.status;
+        if (status == 200) {
+            const obj = res.data;
+            if ("success" in obj && obj["success"]) {
+                const payload: IDashboardProps = obj["payload"];
+                console.log(payload);
+                ReactDOM.render(
+                    <BrowserRouter>
+                        <Dashboard {...payload}/>
+                    </BrowserRouter>,
+                root);
 
-    // axios.get(`/dashboard-api/init.json`).then(res => {
-    //     const status = res.status;
-    //     if (status == 200) {
-    //         const obj = res.data;
-    //         if ("success" in obj && obj["success"]) {
-    //             const payload: IDashboardProps = obj["payload"];
-    //             ReactDOM.render(
-    //                 <BrowserRouter>
-    //                     <NewDashboard {...payload} />
-    //                 </BrowserRouter>,
-    //                 root);
+                const loadingElement = document.getElementById('loading');
+                if (loadingElement) {
+                    loadingElement.remove();
+                }
+            } else {
+                console.log(`Status: ${status}`);
+                console.log(res.data);
+            }
+        } else {
+            console.log(`Status: ${status}`);
+            console.log(res.data);
+        }
+    });
 
-    //             const loadingElement = document.getElementById('loading');
-    //             if (loadingElement) {
-    //                 loadingElement.remove();
-    //             }
-    //         }
-    //     } else {
-    //         console.log(`Status: ${status}`);
-    //         console.log(res.data);
-    //     }
-    // })
+    console.log("test");
 }
-
-/**
- * / => root
- * /profile => see all data we have on person
- * /apply => form and pending text
- * /apply/team => team deets
- */

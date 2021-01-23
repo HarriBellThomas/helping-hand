@@ -8,7 +8,11 @@ use Illuminate\Support\Facades\Auth;
 class Home extends Controller
 {
     public function index() {
-        return view('frontpages/index');
+        if(Auth::check()) {
+            return view('frontpages/index');
+        }
+        
+        return redirect()->route('login');
     }
 
     // public function apply() {

@@ -56,31 +56,33 @@ Route::get('/login/{driver?}', 'Auth\Auth0IndexController@login')->name('login')
 
 Route::middleware(['auth.check_staging'])->group(function() {
     Route::get('/', 'Home@index')->name('home');
-    Route::get('/apply', 'Home@apply')->name('apply');
-    Route::get('/conduct', 'Home@conduct')->name('conduct');
-    Route::get('/privacy', 'Home@privacy')->name('privacy');
-    Route::get('/terms', 'Home@terms')->name('terms');
-    // Route::get('/foundation', 'Foundation@index')->name('foundation_index');
+
+
+    // Private API
+    Route::get('/api/{path}.json', 'Dashboard@api_get')->name('dashboard_api_get');
+    // Route::middleware(['verifyCsrf'])
+    //     ->post('/api/{path}.json', 'Dashboard@api_post')
+    //     ->name('dashboard_api_post');
 
     // Protected routes - login will be forced.
-    Route::middleware(['auth', 'type:hacker'])->group(function () {
+    // Route::middleware(['auth', 'type:hacker'])->group(function () {
 
-        // Slack invite link
-        Route::get('/dashboard/join-discord', 'Dashboard@join_discord')->name("discord_invite");
+    //     // Slack invite link
+    //     Route::get('/dashboard/join-discord', 'Dashboard@join_discord')->name("discord_invite");
 
-        // React App
-        Route::get('/dashboard/{path?}', [
-            'uses' => 'Dashboard@index',
-            'as' => 'dashboard_index',
-            'where' => ['path' => '.*']
-        ]);
+    //     // React App
+    //     Route::get('/dashboard/{path?}', [
+    //         'uses' => 'Dashboard@index',
+    //         'as' => 'dashboard_index',
+    //         'where' => ['path' => '.*']
+    //     ]);
 
-        // Private API
-        Route::get('/dashboard-api/{path}.json', 'Dashboard@api_get')->name('dashboard_api_get');
-        Route::middleware(['verifyCsrf'])
-            ->post('/dashboard-api/{path}.json', 'Dashboard@api_post')
-            ->name('dashboard_api_post');
-    });
+    //     // Private API
+    //     Route::get('/dashboard-api/{path}.json', 'Dashboard@api_get')->name('dashboard_api_get');
+    //     Route::middleware(['verifyCsrf'])
+    //         ->post('/dashboard-api/{path}.json', 'Dashboard@api_post')
+    //         ->name('dashboard_api_post');
+    // });
     
     Route::middleware(['auth.passwordless', 'type:mentor'])->group(function() {
 
