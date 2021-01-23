@@ -1,12 +1,15 @@
-import { AppProvider, Frame, Navigation, TopBar } from "@shopify/polaris";
-import { ArrowLeftMinor, ConversationMinor, HomeMajor, OrdersMajor } from "@shopify/polaris-icons";
+import { AppProvider, Frame, Navigation, Modal, TopBar, TextContainer, FormLayout, TextField } from "@shopify/polaris";
+import { ArrowLeftMinor, ConversationMinor, CustomersMajor, HomeMajor, OrdersMajor } from "@shopify/polaris-icons";
 import React from "react";
-import { Component } from "react";
+import { Component, useState} from "react";
 import HelpingMap from "./HelpingMap";
-import NewDashboard from "./NewDashboard";
 
 
 class Dashboard extends Component {
+
+    state = {
+      showAccountDialog: false,
+    }
 
     private userMenuMarkup = (
         <TopBar.UserMenu
@@ -28,14 +31,15 @@ class Dashboard extends Component {
       );
 
     private navigationMarkup = (
+      
         <Navigation location="/">
           <Navigation.Section
             title="Helping Hand"
             items={[
               {
-                label: 'Dashboard',
-                icon: HomeMajor,
-                onClick: () => {},
+                label: 'Account',
+                icon: CustomersMajor,
+                onClick: () => {this.setState({showAccountDialog: true})},
               },
               {
                 label: 'Orders',
@@ -53,6 +57,7 @@ class Dashboard extends Component {
       );
       
     render() {
+
         return (
             <div style={{height: '100%'}}>
                 <AppProvider
@@ -72,6 +77,26 @@ class Dashboard extends Component {
                     >
                         <HelpingMap/>
                     </Frame>
+
+                    <Modal
+                      open={this.state.showAccountDialog}
+                      title="Account Details"
+                      onClose={() => {this.setState({showAccountDialog: false})}}
+                    >
+                      <Modal.Section>
+                        <TextContainer>
+                          <p>
+                            Hello, [NAME GOES HERE]
+                          </p>
+                          <br></br>
+                        </TextContainer>
+                      <FormLayout>
+                          <TextField type="email" label="Email" onChange={() => {}} />
+                          <TextField type="password" label="Password" onChange={() => {}} />
+                        </FormLayout>
+                      </Modal.Section>
+                  </Modal>
+
                 </AppProvider>
             </div>
         );
