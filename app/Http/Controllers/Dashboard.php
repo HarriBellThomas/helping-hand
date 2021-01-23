@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-
+use App\Models\Job;
 
 class Dashboard extends Controller
 {
@@ -112,7 +112,43 @@ class Dashboard extends Controller
             ]);
         }
 
-        return $this->fail("Need to be logged in.");
+        return $this->fail("Invalid request.");
+    }
+
+    private function submitJob($request) {
+        $required = [
+            "lat",
+            "long",
+            "summary",
+            "description",
+            "completion_target_1",
+            "completion_target_2",
+        ];
+        if (Auth::check() && $this->hasParameters($request, $required)) {
+            $job = new Job();
+
+            // From request body.
+            $job->setAttribute("lat", $request->get("lat"));
+            $job->setAttribute("long", $request->get("long"));
+            $job->setAttribute("summary", $request->get("lat"));
+            $job->setAttribute("description", $request->get("description"));
+            $job->setAttribute("completion_target_1", $request->get("completion_target_1"));
+            $job->setAttribute("completion_target_2", $request->get("completion_target_2"));
+
+            // Infer jobs.
+            $job->setAttribute("owner_id", Auth::user()->sub);
+            $job->setAttribute("created", 0);
+            $job->setAttribute("status", "pending");
+
+            // Save job.
+            if ($job->save()) {
+                return $this->response(true, ["job" => $job]);
+            } else {
+                return $this->fail("Failed to save job.");
+            }
+        }
+
+        return $this->fail("Invalid request.");
     }
 
 }
