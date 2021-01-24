@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
 import L from 'leaflet';
 import axios from 'axios';
 import { IJobDefinition, IHelpingMapProps } from "../../interfaces/dashboard.interfaces";
@@ -56,6 +56,7 @@ class HelpingMap extends Component<IHelpingMapProps, IHelpingMapState> {
                     url={`https://api.mapbox.com/styles/v1/timlaz/ckk9wcq2k2qz217p1nfkcjcni/tiles/256/{z}/{x}/{y}@2x?access_token=${MAPBOX_KEY}`}
                 />
                 {jobMarkers}
+                <Circle center={[this.state.latitude, this.state.longitude]} radius={this.state.radius * 1000} color='lightgreen' interactive={false}/>
             </MapContainer>
         );
     }
