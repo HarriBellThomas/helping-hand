@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('family_name');
             $table->string('name');
             $table->string('picture');
+            $table->string('current_postcode');
             $table->timestamps();
         });
     }

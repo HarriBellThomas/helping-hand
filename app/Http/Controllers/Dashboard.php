@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Job;
+use App\User;
 
 class Dashboard extends Controller
 {
@@ -30,6 +31,8 @@ class Dashboard extends Controller
                 return $this->submitJob($request);
             case "update-job":
                 return $this->updateJob($request);
+            case "update-postcode":
+                return $this->updatePostcode($request);
             default:
                 return $this->fail("Route not found");
         }
@@ -180,6 +183,28 @@ class Dashboard extends Controller
                 return $this->response(true, ["job" => $job]);
             } else {
                 return $this->fail("Failed to save job.");
+            }
+        }
+
+        return $this->fail("Invalid request.");
+    }
+
+    private function updatePostcode($request)
+    {
+        $required = [
+            "id",
+            "postcode",
+        ];
+        if (Auth::check() && $this->hasParameters($request, $required)) {
+            $user = User::where("id", $request->id)->first();
+
+            $user->setAttribute("current_postcode", $request->get("postcode"));
+
+            // Save user.
+            if ($user->save()) {
+                return $this->response(true, ["user" => $user]);
+            } else {
+                return $this->fail("Failed to save user.");
             }
         }
 
