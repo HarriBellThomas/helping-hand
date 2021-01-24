@@ -68,35 +68,6 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
         });
     }
 
-
-    private createJob = () => {
-        axios.post(`/api/create-job.json`, {
-            latitude: 52.2043,
-            longitude: 0.1196,
-            summary: "test",
-            description: "test",
-            completion_target_1: 0,
-            completion_target_2: 0,
-            severity: "URGENT",
-        }).then(res => {
-            const status = res.status;
-            if (status == 200) {
-                const obj = res.data;
-                if ("success" in obj && obj["success"]) {
-                    // console.log(obj["payload"]);
-                    // const oldJobs = this.state.jobs;
-                    // oldJobs.push(obj["payload"]["job"] as IJobDefinition);
-                    // this.setState({ jobs: oldJobs });
-                    return;
-                }
-                console.log("Damn...", obj);
-                return;
-            } else {
-                console.log(res);
-            }
-        });
-    }
-
     private panToCoordinates(lat: number, lon: number) {
         this.setState({
             panToLatitude: lat,
@@ -143,7 +114,7 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                         }
                     }}
                     i18n={{}}
-                    features={{ newDesignLanguage: true }}
+                    features={{ newDesignLanguage: false }}
                 >
                     <Frame
                         navigation={this.navigationMarkup}
@@ -199,7 +170,7 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
 
                     <AddJobModal openModal={this.state.showAddJobModal} onClose={() => {
                         this.setState({ showAddJobModal: false });
-                        // this.updateJobs(this.state);
+                        this.updateJobs(this.state.centerLatitude, this.state.centerLongitude, this.state.jobRadius);
                     }}/>
 
                     <Sheet open={sheetOpen} onClose={() => this.setState({ sheetOpen: false })}>
