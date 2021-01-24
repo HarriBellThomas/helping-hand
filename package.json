@@ -12,6 +12,7 @@
     },
     "devDependencies": {
         "@babel/preset-react": "^7.0.0",
+        "@types/": "seanhouli/react-mapbox-search",
         "@types/country-list": "^2.1.0",
         "@types/leaflet": "^1.5.21",
         "axios": "^0.21.1",
@@ -28,6 +29,7 @@
     "dependencies": {
         "@babel/plugin-proposal-class-properties": "^7.5.5",
         "@babel/preset-typescript": "^7.3.3",
+        "@seanhouli/react-mapbox-search": "^1.0.5",
         "@shopify/polaris": "^5.13.1",
         "@shopify/polaris-icons": "^4.1.0",
         "@shopify/react-shopify-app-route-propagator": "^3.0.1",
@@ -51,6 +53,7 @@
         "react-container-dimensions": "^1.4.1",
         "react-json-view": "^1.19.1",
         "react-leaflet": "^3.0.5",
+        "react-mapbox-search": "https://github.com/tonxxd/react-mapbox-search",
         "react-markdown": "^5.0.2",
         "react-qr-scanner": "^0.0.11",
         "react-responsive-carousel": "^3.2.11",

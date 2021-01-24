@@ -7,6 +7,7 @@ import HelpingMap from "./HelpingMap";
 import JobList from "./JobList";
 import axios from 'axios';
 import { motion } from 'framer-motion'
+import AddJobModal from "./AddJobModal";
 
 interface IDashboardState {
     showAccountDialog: boolean,
@@ -160,7 +161,7 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                             </TextContainer>
                             <FormLayout>
                                 <TextField type="email" label="Email" value={this.props.user.email} disabled={true} onChange={() => { }} />
-                                <TextField type="text" label="Postcode" value={"SM7 1EZ"} onChange={() => { }} />
+                                <TextField type="text" label="Postcode" value={"CB2 1TP"} onChange={() => { }} />
                                 <RangeSlider
                                     label="Search Radius"
                                     value={this.state.jobRadius}
@@ -173,6 +174,8 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                             </FormLayout>
                         </Modal.Section>
                     </Modal>
+
+                    <AddJobModal openModal={true} onClose={() => {}}/>
 
                     <Sheet open={sheetOpen} onClose={() => this.setState({ sheetOpen: false })}>
                         <div

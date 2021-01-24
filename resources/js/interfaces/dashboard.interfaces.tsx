@@ -26,3 +26,8 @@ export interface IJobDefinition {
 export interface IJobListProps {
     jobs: IJobDefinition[],
 }
+
+export interface IAddJobModalProps {
+    openModal: boolean,
+    onClose: () => void,
+}
