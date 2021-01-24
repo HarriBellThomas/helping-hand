@@ -26,6 +26,8 @@ export interface IJobDefinition {
     summary: string,
     severity: string,
     distance: number,
+    description: string,
+    completion_target_1: number,
 }
 export interface IJobListProps {
     jobs: IJobDefinition[],
@@ -35,4 +37,10 @@ export interface IJobListProps {
 export interface IAddJobModalProps {
     openModal: boolean,
     onClose: () => void,
+}
+
+export interface IViewJobModalProps {
+    openModal: boolean,
+    onClose: () => void,
+    job: IJobDefinition,
 }

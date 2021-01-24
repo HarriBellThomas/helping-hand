@@ -8,6 +8,7 @@ import JobList from "./JobList";
 import axios from 'axios';
 import { motion } from 'framer-motion'
 import AddJobModal from "./AddJobModal";
+import ViewJobModal from "./ViewJobModal";
 
 interface IDashboardState {
     showAccountDialog: boolean,
@@ -295,7 +296,12 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                         </Modal.Section>
                     </Modal>
 
-                    <AddJobModal openModal={this.state.showAddJobModal} onClose={() => {
+                    <AddJobModal openModal={false} onClose={() => {
+                        this.setState({ showAddJobModal: false });
+                        this.updateJobs(this.state.centerLatitude, this.state.centerLongitude, this.state.jobRadius);
+                    }}/>
+
+                    <ViewJobModal openModal={this.state.showAddJobModal} job={this.state.jobs[1]} onClose={() => {
                         this.setState({ showAddJobModal: false });
                         this.updateJobs(this.state.centerLatitude, this.state.centerLongitude, this.state.jobRadius);
                     }}/>
