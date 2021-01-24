@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\DB;
 
 class Dashboard extends Controller
 {
-    public function api_get(Request $request, $path) {
+    public function api_get(Request $request, $path)
+    {
         $r = $request->request;
         switch ($path) {
             case "init":
@@ -20,38 +21,45 @@ class Dashboard extends Controller
         }
     }
 
-    public function api_post(Request $request, $path) {
+    public function api_post(Request $request, $path)
+    {
         $r = $request->request;
         switch ($path) {
             case "get-jobs":
                 return $this->findLocalJobs($request);
+            case "create-job":
+                return $this->submitJob($request);
             default:
-                return $this->fail("Route not found"); 
+                return $this->fail("Route not found");
         }
-    } 
+    }
 
     //
 
-    private function response($success = true, $payload) {
+    private function response($success = true, $payload)
+    {
         return response()->json([
             'success' => $success,
             'payload' => $payload
         ]);
     }
 
-    private function fail($message) {
+    private function fail($message)
+    {
         return $this->response(false, [
             "message" => $message
         ]);
     }
-    
-    private function success($message) {
+
+    private function success($message)
+    {
         return $this->response(true, [
             "message" => $message
         ]);
     }
 
-    private function hasParameters($r, $params) {
+    private function hasParameters($r, $params)
+    {
         if ($r) {
             foreach ($params as $param) {
                 $val = $r->get($param);
@@ -63,7 +71,8 @@ class Dashboard extends Controller
 
     //
 
-    private function initSession() {
+    private function initSession()
+    {
         if (Auth::check()) {
             $user = Auth::user();
             return $this->response(true, [
@@ -78,70 +87,84 @@ class Dashboard extends Controller
         return $this->fail("Need to be logged in.");
     }
 
-    private function findLocalJobs($request) {
+    private function findLocalJobs($request)
+    {
         $required = ["lat", "long", "radius"];
         if (Auth::check() && $this->hasParameters($request, $required)) {
-	    //$jobs = DB::table('jobs')
-	    //        ->select('*', DB::raw('6371 * 2 * ASIN(SQRT(POWER(SIN((37 - abs('. $request->lat .')) * pi()/180 / 2), 2) + COS(37 * pi()/180 ) * COS(abs('. $request->lat .') * pi()/180) * POWER(SIN((-122 - '. $request->long .') * pi()/180 / 2), 2) )) as distance'))
-	    //        ->where('distance', '<', 'radius')
-	    //        ->get();
-	    //return $this->response(true, ["jobs" =>  $jobs]);
-            return $this->response(true, [
-                "jobs" => array(
-                    [
-                        "id" => "_1",
-                        "lat" => 52.2087, 
-                        "long" => 0.1149,
-                        "summary" => "Mow my lawn, bitches",                        
-                        "description" => "This is something...",
-                        "owner_name" => "Harri",
-                        "owner_id" => "harri",
-                        "created" => 1611436310,
-                        "completion_target_1" => 1611436320,
-                        "completion_target_2" => 1611436330,
-                        "status" => "pending",
-                        "severity" => "MEDIUM"
-                    ],
-                    [
-                        "id" => "_2",
-                        "lat" => 52.209120, 
-                        "long" => 0.123199,
-                        "summary" => "Mow my lawn, bitches: the sequel",                        
-                        "description" => "This is something...",
-                        "owner_name" => "Harri",
-                        "owner_id" => "harri",
-                        "created" => 1611436315,
-                        "completion_target_1" => 1611436325,
-                        "completion_target_2" => 1611436335,
-                        "status" => "pending",
-                        "severity" => "URGENT"
-                    ],
-                )
-            ]);
+            $lat = $request->get("lat");
+            $long = $request->get("long");
+            $radius = $request->get("radius");
+
+            // Geofilter.
+            $jobs = DB::table('job')
+                ->select(DB::raw("*, (6371 * acos(cos(radians({$lat}))
+                                    * cos(radians(`latitude`))
+                                    * cos(radians(`longitude`) - radians({$long}))
+                                    + sin(radians({$lat}))
+                                    * sin(radians(`latitude`)))) AS distance "))
+                ->havingRaw('distance < ?', [$radius])
+                ->get();
+            return $this->response(true, ["jobs" => $jobs]);
+
+            // return $this->response(true, [
+            //     "jobs" => array(
+            //         [
+            //             "id" => "_1",
+            //             "lat" => 52.2087,
+            //             "long" => 0.1149,
+            //             "summary" => "Mow my lawn, bitches",
+            //             "description" => "This is something...",
+            //             "owner_name" => "Harri",
+            //             "owner_id" => "harri",
+            //             "created" => 1611436310,
+            //             "completion_target_1" => 1611436320,
+            //             "completion_target_2" => 1611436330,
+            //             "status" => "pending",
+            //             "severity" => "MEDIUM"
+            //         ],
+            //         [
+            //             "id" => "_2",
+            //             "lat" => 52.209120,
+            //             "long" => 0.123199,
+            //             "summary" => "Mow my lawn, bitches: the sequel",
+            //             "description" => "This is something...",
+            //             "owner_name" => "Harri",
+            //             "owner_id" => "harri",
+            //             "created" => 1611436315,
+            //             "completion_target_1" => 1611436325,
+            //             "completion_target_2" => 1611436335,
+            //             "status" => "pending",
+            //             "severity" => "URGENT"
+            //         ],
+            //     )
+            // ]);
         }
 
         return $this->fail("Invalid request.");
     }
 
-    private function submitJob($request) {
+    private function submitJob($request)
+    {
         $required = [
-            "lat",
-            "long",
+            "latitude",
+            "longitude",
             "summary",
             "description",
             "completion_target_1",
             "completion_target_2",
+            "severity",
         ];
         if (Auth::check() && $this->hasParameters($request, $required)) {
             $job = new Job();
 
             // From request body.
-            $job->setAttribute("lat", $request->get("lat"));
-            $job->setAttribute("long", $request->get("long"));
-            $job->setAttribute("summary", $request->get("lat"));
+            $job->setAttribute("latitude", $request->get("latitude"));
+            $job->setAttribute("longitude", $request->get("longitude"));
+            $job->setAttribute("summary", $request->get("summary"));
             $job->setAttribute("description", $request->get("description"));
             $job->setAttribute("completion_target_1", $request->get("completion_target_1"));
             $job->setAttribute("completion_target_2", $request->get("completion_target_2"));
+            $job->setAttribute("severity", $request->get("severity"));
 
             // Infer job metadata.
             $job->setAttribute("owner_id", Auth::user()->sub);
@@ -158,5 +181,4 @@ class Dashboard extends Controller
 
         return $this->fail("Invalid request.");
     }
-
 }

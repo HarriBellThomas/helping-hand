@@ -39,7 +39,7 @@ class HelpingMap extends Component<IHelpingMapProps, IHelpingMapState> {
     render() {
         const MAPBOX_KEY = process.env.MIX_MAPBOX_TOKEN;
         const jobMarkers = this.props.jobs.map((job) =>
-            <Marker key={job.id} position={[job.lat, job.long]} icon={new L.Icon({ iconUrl: 'https://img.icons8.com/flat_round/344/hand.png', iconSize: new L.Point(60, 60) })}>
+            <Marker key={job.id} position={[job.latitude, job.longitude]} icon={new L.Icon({ iconUrl: 'https://img.icons8.com/flat_round/344/hand.png', iconSize: new L.Point(60, 60) })}>
                 <Popup>
                     {job.owner_name} is asking, "{job.summary}"
                 </Popup>

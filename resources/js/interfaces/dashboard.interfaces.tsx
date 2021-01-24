@@ -13,11 +13,11 @@ export interface IHelpingMapProps {
 
 export interface IJobDefinition {
     id: string,
-    lat: number,
-    long: number,
+    latitude: number,
+    longitude: number,
     owner_name: string,
     summary: string,
-    severity: "LOW" | "MEDIUM" | "URGENT" | "EMERGENCY";
+    severity: string,
 }
 export interface IJobListProps {
     jobs: IJobDefinition[],
