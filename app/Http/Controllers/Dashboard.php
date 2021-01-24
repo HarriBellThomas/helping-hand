@@ -6,7 +6,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Job;
-use Illuminate\Support\Facades\DB;
 
 class Dashboard extends Controller
 {
@@ -29,6 +28,8 @@ class Dashboard extends Controller
                 return $this->findLocalJobs($request);
             case "create-job":
                 return $this->submitJob($request);
+            case "update-job":
+                return $this->updateJob($request);
             default:
                 return $this->fail("Route not found");
         }
@@ -96,48 +97,14 @@ class Dashboard extends Controller
             $radius = $request->get("radius");
 
             // Geofilter.
-            $jobs = DB::table('job')
-                ->select(DB::raw("*, (6371 * acos(cos(radians({$lat}))
+            $jobs = Job::selectRaw("*, (6371 * acos(cos(radians({$lat}))
                                     * cos(radians(`latitude`))
                                     * cos(radians(`longitude`) - radians({$long}))
                                     + sin(radians({$lat}))
-                                    * sin(radians(`latitude`)))) AS distance "))
+                                    * sin(radians(`latitude`)))) AS distance ")
                 ->havingRaw('distance < ?', [$radius])
                 ->get();
             return $this->response(true, ["jobs" => $jobs]);
-
-            // return $this->response(true, [
-            //     "jobs" => array(
-            //         [
-            //             "id" => "_1",
-            //             "lat" => 52.2087,
-            //             "long" => 0.1149,
-            //             "summary" => "Mow my lawn, bitches",
-            //             "description" => "This is something...",
-            //             "owner_name" => "Harri",
-            //             "owner_id" => "harri",
-            //             "created" => 1611436310,
-            //             "completion_target_1" => 1611436320,
-            //             "completion_target_2" => 1611436330,
-            //             "status" => "pending",
-            //             "severity" => "MEDIUM"
-            //         ],
-            //         [
-            //             "id" => "_2",
-            //             "lat" => 52.209120,
-            //             "long" => 0.123199,
-            //             "summary" => "Mow my lawn, bitches: the sequel",
-            //             "description" => "This is something...",
-            //             "owner_name" => "Harri",
-            //             "owner_id" => "harri",
-            //             "created" => 1611436315,
-            //             "completion_target_1" => 1611436325,
-            //             "completion_target_2" => 1611436335,
-            //             "status" => "pending",
-            //             "severity" => "URGENT"
-            //         ],
-            //     )
-            // ]);
         }
 
         return $this->fail("Invalid request.");
@@ -170,6 +137,43 @@ class Dashboard extends Controller
             $job->setAttribute("owner_id", Auth::user()->sub);
             $job->setAttribute("created", time());
             $job->setAttribute("status", "pending");
+
+            // Save job.
+            if ($job->save()) {
+                return $this->response(true, ["job" => $job]);
+            } else {
+                return $this->fail("Failed to save job.");
+            }
+        }
+
+        return $this->fail("Invalid request.");
+    }
+
+    private function updateJob($request)
+    {
+        $required = [
+            "id",
+        ];
+        if (Auth::check() && $this->hasParameters($request, $required)) {
+            $job = Job::where('id', $request->id)->first();
+
+            // extract relevant key-vals
+            $newJobData = array_intersect_key(
+                array($request),
+                array_flip(
+                      array(
+                          "latitude",
+                          "longitude",
+                          "summary",
+                          "description",
+                          "completion_target_1",
+                          "completion_target_2",
+                          "severity",
+                          "status")
+                    ));
+
+            // place updates into job
+            $job->fill($newJobData);
 
             // Save job.
             if ($job->save()) {
