@@ -83,7 +83,8 @@ class Dashboard extends Controller
                 "baseUrl" => "",
                 "user" => [
                     "name" => $user->name,
-                    "picture" => $user->picture
+                    "picture" => $user->picture,
+                    "email" => $user->email,
                 ]
             ]);
         }

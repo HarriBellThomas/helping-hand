@@ -7,24 +7,15 @@ import { IJobDefinition, IHelpingMapProps } from "../../interfaces/dashboard.int
 
 
 interface IHelpingMapState {
-    latitude: number;
-    longitude: number;
-    radius: number;
 }
 
 class HelpingMap extends Component<IHelpingMapProps, IHelpingMapState> {
 
-    state = {
-        latitude: 52.2043,
-        longitude: 0.1196,
-        radius: 5.0,
-    }
-
     private getJobs = () => {
         this.props.updateJobs(
-            this.state.latitude,
-            this.state.longitude,
-            this.state.radius,
+            this.props.latitude,
+            this.props.longitude,
+            this.props.radius,
         );
     }
 
@@ -50,13 +41,13 @@ class HelpingMap extends Component<IHelpingMapProps, IHelpingMapState> {
 
         return (
             // attribution='Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors, <a href=&quot;https://creativecommons.org/licenses/by-sa/2.0/&quot;>CC-BY-SA</a>, Imagery &copy; <a href=&quot;https://www.mapbox.com/&quot;>Mapbox</a>'
-            <MapContainer center={[this.state.latitude, this.state.longitude]} zoom={16} scrollWheelZoom={true} style={{ height: '100%' }}>
+            <MapContainer center={[this.props.latitude, this.props.longitude]} zoom={16} scrollWheelZoom={true} style={{ height: '100%' }}>
                 <TileLayer
                     attribution=''
                     url={`https://api.mapbox.com/styles/v1/timlaz/ckk9wcq2k2qz217p1nfkcjcni/tiles/256/{z}/{x}/{y}@2x?access_token=${MAPBOX_KEY}`}
                 />
                 {jobMarkers}
-                <Circle center={[this.state.latitude, this.state.longitude]} radius={this.state.radius * 1000} color='lightgreen' interactive={false}/>
+                <Circle center={[this.props.latitude, this.props.longitude]} radius={this.props.radius * 1000} color='lightgreen' interactive={false}/>
             </MapContainer>
         );
     }

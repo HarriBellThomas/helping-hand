@@ -1,4 +1,4 @@
-import { AppProvider, Frame, Navigation, Modal, TopBar, TextContainer, FormLayout, TextField, ButtonGroup, Button, Sheet, Heading } from "@shopify/polaris";
+import { AppProvider, Frame, Navigation, Modal, TopBar, TextContainer, FormLayout, TextField, ButtonGroup, Button, Sheet, Heading, RangeSlider } from "@shopify/polaris";
 import { ArrowLeftMinor, CirclePlusMajor, ConversationMinor, CustomersMajor, HomeMajor, MobileCancelMajor, OrdersMajor, TextAlignmentLeftMajor } from "@shopify/polaris-icons";
 import React from "react";
 import { Component, useState } from "react";
@@ -12,6 +12,9 @@ interface IDashboardState {
     showAccountDialog: boolean,
     sheetOpen: boolean,
     jobs: IJobDefinition[],
+    jobRadius: number,
+    centerLatitude: number,
+    centerLongitude: number,
 }
 
 
@@ -21,6 +24,14 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
         showAccountDialog: false,
         sheetOpen: false,
         jobs: [] as IJobDefinition[],
+        jobRadius: 3,
+        centerLatitude: 52.2053,
+        centerLongitude: 0.1218,
+    }
+
+    private updateSearchRadius(newValue: number): void {
+        this.setState({jobRadius: newValue});
+        this.updateJobs(this.state.centerLatitude, this.state.centerLongitude, this.state.jobRadius);
     }
 
     private updateJobs = (lat: number, long: number, radius: number) => {
@@ -122,6 +133,9 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                         <HelpingMap
                             updateJobs={this.updateJobs}
                             jobs={jobs}
+                            radius={this.state.jobRadius}
+                            latitude={this.state.centerLatitude}
+                            longitude={this.state.centerLongitude}
                         />
 
                         <motion.div animate = {{right: `${leftOffset}rem`}} className="multitool" transition={{type: "tween", ease:[0.25, 0.1, 0.25, 1.0], duration: 0.3, delay: 0.04}}>
@@ -140,13 +154,22 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                         <Modal.Section>
                             <TextContainer>
                                 <p>
-                                    Hello, [NAME GOES HERE]
+                                    Hello, {this.props.user.name}
                           </p>
                                 <br></br>
                             </TextContainer>
                             <FormLayout>
-                                <TextField type="email" label="Email" onChange={() => { }} />
-                                <TextField type="password" label="Password" onChange={() => { }} />
+                                <TextField type="email" label="Email" value={this.props.user.email} disabled={true} onChange={() => { }} />
+                                <TextField type="text" label="Postcode" value={"SM7 1EZ"} onChange={() => { }} />
+                                <RangeSlider
+                                    label="Search Radius"
+                                    value={this.state.jobRadius}
+                                    min={0.1}
+                                    max={5}
+                                    onChange={(newVal: number) => {this.updateSearchRadius(newVal)}}
+                                    step={0.1}
+                                    output
+                                />
                             </FormLayout>
                         </Modal.Section>
                     </Modal>
