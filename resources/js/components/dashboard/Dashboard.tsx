@@ -6,6 +6,7 @@ import { IDashboardProps, IJobDefinition } from "../../interfaces/dashboard.inte
 import HelpingMap from "./HelpingMap";
 import JobList from "./JobList";
 import axios from 'axios';
+import { motion } from 'framer-motion'
 
 interface IDashboardState {
     showAccountDialog: boolean,
@@ -95,12 +96,12 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                             jobs={jobs}
                         />
 
-                        <div className="multitool" style={{ right: `${leftOffset}rem` }}>
+                        <motion.div animate = {{right: `${leftOffset}rem`}} className="multitool" transition={{type: "tween", ease:[0.25, 0.1, 0.25, 1.0], duration: 0.3, delay: 0.04}}>
                             <ButtonGroup segmented>
                                 <Button icon={TextAlignmentLeftMajor} size="large" onClick={() => this.setState({ sheetOpen: !sheetOpen })}></Button>
                                 <Button primary icon={CirclePlusMajor} size="large"></Button>
                             </ButtonGroup>
-                        </div>
+                        </motion.div>
                     </Frame>
 
                     <Modal
@@ -121,7 +122,6 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                             </FormLayout>
                         </Modal.Section>
                     </Modal>
-
 
                     <Sheet open={sheetOpen} onClose={() => this.setState({ sheetOpen: false })}>
                         <div
