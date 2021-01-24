@@ -86,8 +86,6 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
         });
     }
 
-<<<<<<< HEAD
-=======
     private getMyJobs = (lat: number, long: number, radius: number) => {
         console.log(3);
         axios.post(`/api/get-jobs-owned-by-user.json`, {
@@ -164,7 +162,6 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
         });
     }
 
->>>>>>> 7017d747d958e6b8cbdb634dafd8cad2fac988bf
     private panToCoordinates(lat: number, lon: number) {
         this.setState({
             panToLatitude: lat,
