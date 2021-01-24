@@ -38,10 +38,8 @@ class HelpingMap extends Component<IHelpingMapProps, IHelpingMapState> {
     }
 
     componentDidUpdate(prevProps: IHelpingMapProps, prevState: IHelpingMapState): void {
-        console.log("a", this.props);
         if (this.props.panIncrement !== prevProps.panIncrement && this.props.panIncrement > 0) {
             const { panToLatitude, panToLongitude } = this.props;
-            console.log("new coords", panToLatitude, panToLongitude);
             this.setState({ viewLatitude: panToLatitude, viewLongitude: panToLongitude, lockAnimation: true });
             if (this.map) {
                 this.setState({ lockAnimation: true });
