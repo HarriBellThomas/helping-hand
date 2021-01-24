@@ -140,8 +140,8 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
 
                         <motion.div animate = {{right: `${leftOffset}rem`}} className="multitool" transition={{type: "tween", ease:[0.25, 0.1, 0.25, 1.0], duration: 0.3, delay: 0.04}}>
                             <ButtonGroup segmented>
-                                <Button icon={TextAlignmentLeftMajor} size="large" onClick={() => this.setState({ sheetOpen: !sheetOpen })}></Button>
                                 <Button primary icon={CirclePlusMajor} size="large"></Button>
+                                <Button icon={TextAlignmentLeftMajor} size="large" onClick={() => this.setState({ sheetOpen: !sheetOpen })}></Button>
                             </ButtonGroup>
                         </motion.div>
                     </Frame>
