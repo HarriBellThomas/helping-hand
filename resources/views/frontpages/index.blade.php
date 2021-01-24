@@ -1,6 +1,6 @@
 @extends('layouts.base')
 
-@section('title', 'Dashboard')
+@section('title', 'Culdesac')
 
 @section('content')
     <link rel="stylesheet" type="text/css" href="{{ mix('assets/css/app.css') }}">

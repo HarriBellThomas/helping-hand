@@ -12,8 +12,8 @@ interface IAddJobModalState {
     placeName: string
     searchSuggestions: any[]
     searchLoading: boolean
-    currentLatitude: boolean
-    currentLongitude: boolean
+    currentLatitude: number
+    currentLongitude: number
 }
 
 class AddJobModal extends Component<IAddJobModalProps, IAddJobModalState> {

@@ -1,6 +1,6 @@
 <html lang="{{ app()->getLocale() }}">
     <head>
-        <title>@yield('title') — Hack Cambridge</title>
+        <title>@yield('title')</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -15,7 +15,7 @@
         <link rel="shortcut icon" type="image/png" href="{{ asset('images/favicon.png') }}"/>
 
         <link rel="preconnect" href="https://fonts.gstatic.com"> 
-        <link href="https://fonts.googleapis.com/css2?family=Volkorn:wght@300;400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Volkorn:wght@300;400;700&display=swap" type="text/css">
     </head>
     <body>
         @yield('content')

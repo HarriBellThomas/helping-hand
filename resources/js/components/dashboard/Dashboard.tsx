@@ -16,6 +16,10 @@ interface IDashboardState {
     jobRadius: number,
     centerLatitude: number,
     centerLongitude: number,
+    panIncrement: number,
+    panToLatitude: number,
+    panToLongitude: number,
+    showAddJobModal: boolean,
 }
 
 
@@ -28,6 +32,10 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
         jobRadius: 3,
         centerLatitude: 52.2053,
         centerLongitude: 0.1218,
+        panIncrement: 0,
+        panToLatitude: 0,
+        panToLongitude: 0,
+        showAddJobModal: false,
     }
 
     private updateSearchRadius(newValue: number): void {
@@ -75,7 +83,10 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
             if (status == 200) {
                 const obj = res.data;
                 if ("success" in obj && obj["success"]) {
-                    console.log(obj["payload"]);
+                    // console.log(obj["payload"]);
+                    // const oldJobs = this.state.jobs;
+                    // oldJobs.push(obj["payload"]["job"] as IJobDefinition);
+                    // this.setState({ jobs: oldJobs });
                     return;
                 }
                 console.log("Damn...", obj);
@@ -86,11 +97,19 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
         });
     }
 
+    private panToCoordinates(lat: number, lon: number) {
+        this.setState({
+            panToLatitude: lat,
+            panToLongitude: lon,
+            panIncrement: this.state.panIncrement + 1,
+        });
+    }
+
     private navigationMarkup = (
 
         <Navigation location="/">
+            <img className="culdesac-logo" src={"/images/culdesac.png"} style={{ margin: "1rem 3rem 1rem 1rem" }} />
             <Navigation.Section
-                title="Helping Hand"
                 items={[
                     {
                         label: 'Account',
@@ -106,14 +125,14 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                 action={{
                     icon: ConversationMinor,
                     accessibilityLabel: 'Contact support',
-                    onClick: () => this.createJob(),
+                    onClick: () => this.panToCoordinates(0,0),
                 }}
             />
         </Navigation>
     );
 
     render() {
-        const { showAccountDialog, sheetOpen, jobs } = this.state;
+        const { showAccountDialog, sheetOpen, jobs, panIncrement, panToLatitude, panToLongitude } = this.state;
         const leftOffset = sheetOpen ? 46 : 1;
         return (
             <div style={{ height: '100%' }}>
@@ -137,11 +156,14 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                             radius={this.state.jobRadius}
                             latitude={this.state.centerLatitude}
                             longitude={this.state.centerLongitude}
+                            panIncrement={panIncrement}
+                            panToLatitude={panToLatitude}
+                            panToLongitude={panToLongitude}
                         />
 
                         <motion.div animate = {{right: `${leftOffset}rem`}} className="multitool" transition={{type: "tween", ease:[0.25, 0.1, 0.25, 1.0], duration: 0.3, delay: 0.04}}>
                             <ButtonGroup segmented>
-                                <Button primary icon={CirclePlusMajor} size="large"></Button>
+                                <Button primary icon={CirclePlusMajor} size="large" onClick={() => this.setState({ showAddJobModal: !this.state.showAddJobModal })}></Button>
                                 <Button icon={TextAlignmentLeftMajor} size="large" onClick={() => this.setState({ sheetOpen: !sheetOpen })}></Button>
                             </ButtonGroup>
                         </motion.div>
@@ -175,7 +197,10 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                         </Modal.Section>
                     </Modal>
 
-                    <AddJobModal openModal={true} onClose={() => {}}/>
+                    <AddJobModal openModal={this.state.showAddJobModal} onClose={() => {
+                        this.setState({ showAddJobModal: false });
+                        // this.updateJobs(this.state);
+                    }}/>
 
                     <Sheet open={sheetOpen} onClose={() => this.setState({ sheetOpen: false })}>
                         <div
@@ -196,7 +221,7 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                                 plain
                             />
                         </div>
-                        <JobList jobs={jobs}/>
+                        <JobList jobs={jobs} showJob={(job) => this.panToCoordinates(job.latitude, job.longitude)}/>
                     </Sheet>
 
 

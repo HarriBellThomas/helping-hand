@@ -13,6 +13,9 @@ export interface IHelpingMapProps {
     latitude: number,
     longitude: number,
     radius: number,
+    panToLatitude: number,
+    panToLongitude: number,
+    panIncrement: number,
 }
 
 export interface IJobDefinition {
@@ -25,6 +28,7 @@ export interface IJobDefinition {
 }
 export interface IJobListProps {
     jobs: IJobDefinition[],
+    showJob: (job: IJobDefinition) => void,
 }
 
 export interface IAddJobModalProps {

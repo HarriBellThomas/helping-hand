@@ -31,7 +31,7 @@ class JobList extends Component<IJobListProps, {}> {
         return (
             <ResourceItem
               id={id}
-              onClick={() => {}}
+              onClick={() => this.props.showJob(job)}
             >
                 <span style={{ display: "inline-block" }}>
                     <div style={{ width: "1rem", height: "1rem", backgroundColor: colour, display: "inline-block", borderRadius: "1rem", marginRight: "1rem" }} />
