@@ -7,9 +7,8 @@ export interface IDashboardProps {
 }
 
 export interface IHelpingMapProps {
-    latitude: number,
-    longitude: number,
-    radius: number,
+    updateJobs: (lat: number, long: number, radius: number) => void,
+    jobs: IJobDefinition[],
 }
 
 export interface IJobDefinition {
@@ -18,4 +17,8 @@ export interface IJobDefinition {
     long: number,
     owner_name: string,
     summary: string,
+    severity: "LOW" | "MEDIUM" | "URGENT" | "EMERGENCY";
+}
+export interface IJobListProps {
+    jobs: IJobDefinition[],
 }

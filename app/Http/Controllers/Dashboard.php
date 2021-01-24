@@ -93,7 +93,8 @@ class Dashboard extends Controller
                         "created" => 1611436310,
                         "completion_target_1" => 1611436320,
                         "completion_target_2" => 1611436330,
-                        "status" => "pending"
+                        "status" => "pending",
+                        "severity" => "MEDIUM"
                     ],
                     [
                         "id" => "_2",
@@ -106,7 +107,8 @@ class Dashboard extends Controller
                         "created" => 1611436315,
                         "completion_target_1" => 1611436325,
                         "completion_target_2" => 1611436335,
-                        "status" => "pending"
+                        "status" => "pending",
+                        "severity" => "URGENT"
                     ],
                 )
             ]);
