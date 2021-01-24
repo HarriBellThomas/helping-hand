@@ -1,14 +1,16 @@
 import { AppProvider, Frame, Navigation, Modal, TopBar, TextContainer, FormLayout, TextField, ButtonGroup, Button, Sheet, Heading } from "@shopify/polaris";
-import { ArrowLeftMinor, CirclePlusMajor, ConversationMinor, CustomersMajor, HomeMajor, MobileCancelMajor, OrdersMajor } from "@shopify/polaris-icons";
+import { ArrowLeftMinor, CirclePlusMajor, ConversationMinor, CustomersMajor, HomeMajor, MobileCancelMajor, OrdersMajor, TextAlignmentLeftMajor } from "@shopify/polaris-icons";
 import React from "react";
 import { Component, useState } from "react";
-import { IDashboardProps } from "../../interfaces/dashboard.interfaces";
+import { IDashboardProps, IJobDefinition } from "../../interfaces/dashboard.interfaces";
 import HelpingMap from "./HelpingMap";
-
+import JobList from "./JobList";
+import axios from 'axios';
 
 interface IDashboardState {
     showAccountDialog: boolean,
     sheetOpen: boolean,
+    jobs: IJobDefinition[],
 }
 
 
@@ -17,6 +19,30 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
     state = {
         showAccountDialog: false,
         sheetOpen: false,
+        jobs: [] as IJobDefinition[],
+    }
+
+    private updateJobs = (lat: number, long: number, radius: number) => {
+        axios.post(`/api/get-jobs.json`, {
+            lat: lat,
+            long: long,
+            radius: radius,
+        }).then(res => {
+            const status = res.status;
+            if (status == 200) {
+                const obj = res.data;
+                if ("success" in obj && obj["success"]) {
+                    const jobs: IJobDefinition[] = obj["payload"]["jobs"] as IJobDefinition[];
+                    this.setState({ jobs: jobs });
+                    console.log(jobs);
+                    return;
+                }
+                console.log("Damn...");
+                return;
+            } else {
+                console.log(res);
+            }
+        });
     }
 
     private navigationMarkup = (
@@ -46,7 +72,7 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
     );
 
     render() {
-        const { showAccountDialog, sheetOpen } = this.state;
+        const { showAccountDialog, sheetOpen, jobs } = this.state;
         const leftOffset = sheetOpen ? 39 : 1;
         return (
             <div style={{ height: '100%' }}>
@@ -65,14 +91,13 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                         onNavigationDismiss={() => { }}
                     >
                         <HelpingMap
-                            latitude={52.2043}
-                            longitude={0.1196}
-                            radius={5}
+                            updateJobs={this.updateJobs}
+                            jobs={jobs}
                         />
 
                         <div className="multitool" style={{ right: `${leftOffset}rem` }}>
                             <ButtonGroup segmented>
-                                <Button icon={HomeMajor} size="large" onClick={() => this.setState({ sheetOpen: !sheetOpen })}></Button>
+                                <Button icon={TextAlignmentLeftMajor} size="large" onClick={() => this.setState({ sheetOpen: !sheetOpen })}></Button>
                                 <Button primary icon={CirclePlusMajor} size="large"></Button>
                             </ButtonGroup>
                         </div>
@@ -109,7 +134,7 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                                 width: '100%',
                             }}
                         >
-                            <Heading>Manage sales channels</Heading>
+                            <Heading>Local Jobs</Heading>
                             <Button
                                 accessibilityLabel="Cancel"
                                 icon={MobileCancelMajor}
@@ -117,6 +142,7 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                                 plain
                             />
                         </div>
+                        <JobList jobs={jobs}/>
                     </Sheet>
 
 
