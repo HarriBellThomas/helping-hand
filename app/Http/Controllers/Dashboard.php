@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Job;
+use App\Models\Assignment;
 use App\User;
 
 class Dashboard extends Controller
@@ -33,6 +35,10 @@ class Dashboard extends Controller
                 return $this->updateJob($request);
             case "update-postcode":
                 return $this->updatePostcode($request);
+            case "get-jobs-owned-by-user":
+                return $this->getJobsOwnedByUser($request);
+            case "get-jobs-assigned-to-user":
+                return $this->getJobsAssignedToUser($request)
             default:
                 return $this->fail("Route not found");
         }
@@ -206,6 +212,34 @@ class Dashboard extends Controller
             } else {
                 return $this->fail("Failed to save user.");
             }
+        }
+
+        return $this->fail("Invalid request.");
+    }
+
+    private function getJobsOwnedByUser($request)
+    {
+        $required = ["id"];
+        if (Auth::check() && $this->hasParameters($request, $required)) {
+            $jobs = Job::where("owner_id", $request->get("id"));
+
+            return $this->response(true, ["jobs" => $jobs]);
+        }
+
+        return $this->fail("Invalid request.");
+    }
+
+    private function getJobsAssignedToUser($request)
+    {
+        $required = ["id"];
+        if (Auth::check() && $this->hasParameters($request, $required)) {
+            $jobs = DB::table("job")
+                        ->join("assignment", "assignment.job_id", 'job.id')
+                        ->where("assignment.user_id", "id")
+                        ->select("job.*")
+                        ->get();
+
+            return $this->response(true, ["jobs" => $jobs]);
         }
 
         return $this->fail("Invalid request.");
