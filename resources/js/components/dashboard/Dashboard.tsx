@@ -175,7 +175,6 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
         <Navigation location="/">
             <img className="culdesac-logo" src={"/images/culdesac.png"} style={{ margin: "1rem 3rem 1rem 1rem" }} />
             <Navigation.Section
-                title="a"
                 items={[
                     {
                         label: 'Account',
