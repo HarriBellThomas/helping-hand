@@ -17,6 +17,7 @@ export interface IHelpingMapProps {
     panToLongitude: number,
     panIncrement: number,
     showCircle: boolean,
+    onJobSelect: (jobToShow: IJobDefinition) => void
 }
 
 export interface IJobDefinition {

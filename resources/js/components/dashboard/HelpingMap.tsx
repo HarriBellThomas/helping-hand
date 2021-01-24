@@ -72,10 +72,7 @@ class HelpingMap extends Component<IHelpingMapProps, IHelpingMapState> {
         const MAPBOX_KEY = process.env.MIX_MAPBOX_TOKEN;
         const className = lockAnimation ? "" : "grow";
         const jobMarkers = this.props.jobs.map((job) =>
-            <Marker key={job.id} position={[job.latitude, job.longitude]} icon={new L.Icon({ iconUrl: this.severityToMarker(job.severity), iconSize: new L.Point(60, 60), className: className })}>
-                <Popup>
-                    {job.owner_name} is asking, "{job.summary}"
-                </Popup>
+            <Marker key={job.id} position={[job.latitude, job.longitude]} icon={new L.Icon({ iconUrl: this.severityToMarker(job.severity), iconSize: new L.Point(60, 60), className: className })} eventHandlers={{click: (e)=>this.props.onJobSelect(job)}}>
             </Marker>
         );
 

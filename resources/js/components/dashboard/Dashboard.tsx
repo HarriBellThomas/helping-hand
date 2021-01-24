@@ -263,6 +263,9 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                             panToLatitude={panToLatitude}
                             panToLongitude={panToLongitude}
                             showCircle={this.state.jobType == 0}
+                            onJobSelect={(job) => {
+                                this.setState({ jobForDetails: job, showJobDetails: true });
+                            }}
                         />
 
                         <motion.div animate = {{right: `${leftOffset}rem`}} className="multitool" transition={{type: "tween", ease:[0.25, 0.1, 0.25, 1.0], duration: 0.3, delay: 0.04}}>
