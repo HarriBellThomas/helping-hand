@@ -191,7 +191,7 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                 action={{
                     icon: ConversationMinor,
                     accessibilityLabel: 'Contact support',
-                    onClick: () => this.panToCoordinates(0,0),
+                    onClick: () => this.createJob()
                 }}
             />
             <Navigation.Section
@@ -258,6 +258,7 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                             panIncrement={panIncrement}
                             panToLatitude={panToLatitude}
                             panToLongitude={panToLongitude}
+                            showCircle={this.state.jobType == 0}
                         />
 
                         <motion.div animate = {{right: `${leftOffset}rem`}} className="multitool" transition={{type: "tween", ease:[0.25, 0.1, 0.25, 1.0], duration: 0.3, delay: 0.04}}>

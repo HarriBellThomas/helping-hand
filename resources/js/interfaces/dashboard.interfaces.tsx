@@ -16,6 +16,7 @@ export interface IHelpingMapProps {
     panToLatitude: number,
     panToLongitude: number,
     panIncrement: number,
+    showCircle: boolean,
 }
 
 export interface IJobDefinition {
