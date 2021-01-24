@@ -21,13 +21,13 @@ class ViewJobModal extends Component<IViewJobModalProps, IViewJobModalState> {
                 title={this.props.job.summary}
                 onClose={() => {this.props.onClose()}}
                 primaryAction={{
-                    content: 'Accept',
+                    content: 'Volunteer',
                     onAction: () => {this.props.onClose()},
                 }}
             >
                 <Modal.Section>
                     <TextContainer>
-                        <Heading>{this.props.job.owner_name ?? 'Timmy'} has a job for you!</Heading>
+                        <Heading>has a job for you!</Heading>
                         <p>
                             {this.props.job.description}
                         </p>

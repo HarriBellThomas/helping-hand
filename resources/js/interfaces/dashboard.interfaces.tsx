@@ -33,6 +33,7 @@ export interface IJobDefinition {
 export interface IJobListProps {
     jobs: IJobDefinition[],
     showJob: (job: IJobDefinition) => void,
+    jobDetails: (job: IJobDefinition) => void,
 }
 
 export interface IAddJobModalProps {

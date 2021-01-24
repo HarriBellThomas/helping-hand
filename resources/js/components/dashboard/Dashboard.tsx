@@ -21,6 +21,8 @@ interface IDashboardState {
     panToLatitude: number,
     panToLongitude: number,
     showAddJobModal: boolean,
+    showJobDetails: boolean,
+    jobForDetails: IJobDefinition | null
     jobType: number,
 }
 
@@ -38,6 +40,8 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
         panToLatitude: 0,
         panToLongitude: 0,
         showAddJobModal: false,
+        showJobDetails: false,
+        jobForDetails: null,
         jobType: 0,
     }
 
@@ -285,7 +289,7 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                                 <TextField type="email" label="Email" value={this.props.user.email} disabled={true} onChange={() => { }} />
                                 <TextField type="text" label="Postcode" value={"CB2 1TP"} onChange={() => { }} />
                                 <RangeSlider
-                                    label="Search Radius"
+                                    label="Search Radius (Km)"
                                     value={this.state.jobRadius}
                                     min={0.1}
                                     max={5}
@@ -297,14 +301,13 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                         </Modal.Section>
                     </Modal>
 
-                    <AddJobModal openModal={false} onClose={() => {
+                    <AddJobModal openModal={this.state.showAddJobModal} onClose={() => {
                         this.setState({ showAddJobModal: false });
                         this.updateJobs(this.state.centerLatitude, this.state.centerLongitude, this.state.jobRadius);
                     }}/>
 
-                    <ViewJobModal openModal={this.state.showAddJobModal} job={this.state.jobs[1]} onClose={() => {
-                        this.setState({ showAddJobModal: false });
-                        this.updateJobs(this.state.centerLatitude, this.state.centerLongitude, this.state.jobRadius);
+                    <ViewJobModal openModal={this.state.showJobDetails} job={this.state.jobForDetails!} onClose={() => {
+                        this.setState({ showJobDetails: false });
                     }}/>
 
                     <Sheet open={sheetOpen} onClose={() => this.setState({ sheetOpen: false })}>
@@ -326,7 +329,13 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                                 plain
                             />
                         </div>
-                        <JobList jobs={jobs} showJob={(job) => this.panToCoordinates(job.latitude, job.longitude)}/>
+                        <JobList 
+                            jobs={jobs}
+                            showJob={(job) => this.panToCoordinates(job.latitude, job.longitude)}
+                            jobDetails={(job) => {
+                                this.setState({ jobForDetails: job, showJobDetails: true });
+                            }}
+                        />
                     </Sheet>
 
 

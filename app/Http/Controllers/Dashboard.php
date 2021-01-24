@@ -240,12 +240,19 @@ class Dashboard extends Controller
 
     private function getJobsAssignedToUser($request)
     {
-        $required = [];
+        $required = ["lat", "long"];
         if (Auth::check() && $this->hasParameters($request, $required)) {
+            $lat = $request->get("lat");
+            $long = $request->get("long");
+
             $jobs = DB::table("job")
                         ->join("assignment", "assignment.job_id", 'job.id')
                         ->where("assignment.assignee_id", Auth::user()->sub)
-                        ->select("job.*");
+                        ->selectRaw("local_job.*, (6371 * acos(cos(radians({$lat}))
+                * cos(radians(`latitude`))
+                * cos(radians(`longitude`) - radians({$long}))
+                + sin(radians({$lat}))
+                * sin(radians(`latitude`)))) AS distance ");
 
             return $this->response(true, ["jobs" => $jobs->get()]);
         }

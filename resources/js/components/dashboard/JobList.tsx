@@ -32,11 +32,11 @@ class JobList extends Component<IJobListProps, {}> {
         return (
             <ResourceItem
               id={id}
-              onClick={() => this.props.showJob(job)}
+              onClick={() => this.props.jobDetails(job)}
             >
                 <span style={{ display: "inline-block" }}>
                     <div style={{ width: "1rem", height: "1rem", backgroundColor: colour, display: "inline-block", borderRadius: "1rem", marginRight: "1rem" }} />
-                    <h3 style={{ lineHeight: "2.8rem", display: "inline-block" }}><TextStyle variation="strong">{job.summary}</TextStyle> ({(Math.round(job.distance * 100) / 100).toFixed(2)}m)</h3>
+                    <h3 style={{ lineHeight: "2.8rem", display: "inline-block" }}><TextStyle variation="strong">{job.summary}</TextStyle> ({(Math.round(job.distance * 100) / 100).toFixed(2)}km)</h3>
                 </span>   
                 <div style={{ float: "right" }}><Button size={"slim"} outline={true} onClick={() => this.props.showJob(job)} icon={LocationMajor}></Button></div>
             </ResourceItem>
