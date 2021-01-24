@@ -15,9 +15,9 @@ class CreateJobTable extends Migration
     {
         Schema::create('job', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('severity');
-            $table->double('long', 10, 7);
-            $table->double('lat', 10, 7);
+            $table->string('severity');
+            $table->double('longitude', 10, 7);
+            $table->double('latitude', 10, 7);
             $table->string('summary');
             $table->string('description');
             $table->string('owner_id');

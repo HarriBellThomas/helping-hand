@@ -32,13 +32,41 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
             const status = res.status;
             if (status == 200) {
                 const obj = res.data;
+                console.log(obj);
                 if ("success" in obj && obj["success"]) {
+                    console.log(obj["payload"]["jobs"]);
                     const jobs: IJobDefinition[] = obj["payload"]["jobs"] as IJobDefinition[];
                     this.setState({ jobs: jobs });
                     console.log(jobs);
                     return;
                 }
                 console.log("Damn...");
+                return;
+            } else {
+                console.log(res);
+            }
+        });
+    }
+
+
+    private createJob = () => {
+        axios.post(`/api/create-job.json`, {
+            latitude: 52.2043,
+            longitude: 0.1196,
+            summary: "test",
+            description: "test",
+            completion_target_1: 0,
+            completion_target_2: 0,
+            severity: "URGENT",
+        }).then(res => {
+            const status = res.status;
+            if (status == 200) {
+                const obj = res.data;
+                if ("success" in obj && obj["success"]) {
+                    console.log(obj["payload"]);
+                    return;
+                }
+                console.log("Damn...", obj);
                 return;
             } else {
                 console.log(res);
@@ -66,7 +94,7 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                 action={{
                     icon: ConversationMinor,
                     accessibilityLabel: 'Contact support',
-                    onClick: () => { },
+                    onClick: () => this.createJob(),
                 }}
             />
         </Navigation>
@@ -74,7 +102,7 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
 
     render() {
         const { showAccountDialog, sheetOpen, jobs } = this.state;
-        const leftOffset = sheetOpen ? 39 : 1;
+        const leftOffset = sheetOpen ? 46 : 1;
         return (
             <div style={{ height: '100%' }}>
                 <AppProvider
@@ -134,7 +162,7 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                                 width: '100%',
                             }}
                         >
-                            <Heading>Local Jobs</Heading>
+                            <Heading>{jobs.length} Local Job{jobs.length != 1 ? "s" : ""}</Heading>
                             <Button
                                 accessibilityLabel="Cancel"
                                 icon={MobileCancelMajor}
