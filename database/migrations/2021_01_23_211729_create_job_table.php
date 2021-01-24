@@ -21,6 +21,7 @@ class CreateJobTable extends Migration
             $table->string('summary');
             $table->string('description');
             $table->string('owner_id');
+            $table->string('owner_name');
             $table->bigInteger('created');
             $table->bigInteger('completion_target_1');
             $table->bigInteger('completion_target_2');
