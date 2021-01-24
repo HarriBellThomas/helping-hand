@@ -1,5 +1,5 @@
 import { AppProvider, Frame, Navigation, Modal, TopBar, TextContainer, FormLayout, TextField, ButtonGroup, Button, Sheet, Heading, RangeSlider } from "@shopify/polaris";
-import { ArrowLeftMinor, CirclePlusMajor, ConversationMinor, CustomersMajor, HomeMajor, MobileCancelMajor, OrdersMajor, TextAlignmentLeftMajor } from "@shopify/polaris-icons";
+import { ArrowLeftMinor, CirclePlusMajor, ConversationMinor, CustomersMajor, FlagMajor, HomeMajor, LocationMajor, MobileBackArrowMajor, MobileCancelMajor, OrdersMajor, SmileyJoyMajor, TextAlignmentLeftMajor } from "@shopify/polaris-icons";
 import React from "react";
 import { Component, useState } from "react";
 import { IDashboardProps, IJobDefinition } from "../../interfaces/dashboard.interfaces";
@@ -20,6 +20,7 @@ interface IDashboardState {
     panToLatitude: number,
     panToLongitude: number,
     showAddJobModal: boolean,
+    jobType: number,
 }
 
 
@@ -36,6 +37,15 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
         panToLatitude: 0,
         panToLongitude: 0,
         showAddJobModal: false,
+        jobType: 0,
+    }
+
+    private jobTitleForType(): string {
+        switch (this.state.jobType) {
+            case 1: return "Owned Job";
+            case 2: return "Volunteered Job";
+            default: return "Local Job";
+        }
     }
 
     private updateSearchRadius(newValue: number): void {
@@ -44,6 +54,16 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
     }
 
     private updateJobs = (lat: number, long: number, radius: number) => {
+        console.log(1);
+        switch (this.state.jobType) {
+            case 1: return this.getMyJobs(lat, long, radius);
+            case 2: return this.getAssignedJobs(lat, long, radius);
+            default: return this.getLocalJobs(lat, long, radius);
+        }
+    }
+
+    private getLocalJobs = (lat: number, long: number, radius: number) => {
+        console.log(2);
         axios.post(`/api/get-jobs.json`, {
             lat: lat,
             long: long,
@@ -54,10 +74,8 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                 const obj = res.data;
                 console.log(obj);
                 if ("success" in obj && obj["success"]) {
-                    console.log(obj["payload"]["jobs"]);
                     const jobs: IJobDefinition[] = obj["payload"]["jobs"] as IJobDefinition[];
                     this.setState({ jobs: jobs });
-                    console.log(jobs);
                     return;
                 }
                 console.log("Damn...");
@@ -68,6 +86,53 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
         });
     }
 
+    private getMyJobs = (lat: number, long: number, radius: number) => {
+        console.log(3);
+        axios.post(`/api/get-jobs-owned-by-user.json`, {
+            lat: lat,
+            long: long,
+            radius: radius,
+        }).then(res => {
+            const status = res.status;
+            if (status == 200) {
+                const obj = res.data;
+                console.log(obj);
+                if ("success" in obj && obj["success"]) {
+                    const jobs: IJobDefinition[] = obj["payload"]["jobs"] as IJobDefinition[];
+                    this.setState({ jobs: jobs });
+                    return;
+                }
+                console.log("Damn...");
+                return;
+            } else {
+                console.log(res);
+            }
+        });
+    }
+
+    private getAssignedJobs = (lat: number, long: number, radius: number) => {
+        console.log(4);
+        axios.post(`/api/get-jobs-assigned-to-user.json`, {
+            lat: lat,
+            long: long,
+            radius: radius,
+        }).then(res => {
+            const status = res.status;
+            if (status == 200) {
+                const obj = res.data;
+                console.log(obj);
+                if ("success" in obj && obj["success"]) {
+                    const jobs: IJobDefinition[] = obj["payload"]["jobs"] as IJobDefinition[];
+                    this.setState({ jobs: jobs });
+                    return;
+                }
+                console.log("Damn...");
+                return;
+            } else {
+                console.log(res);
+            }
+        });
+    }
 
     private createJob = () => {
         axios.post(`/api/create-job.json`, {
@@ -117,9 +182,9 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                         onClick: () => { this.setState({ showAccountDialog: true }) },
                     },
                     {
-                        label: 'Orders',
-                        icon: OrdersMajor,
-                        onClick: () => { },
+                        label: 'Logout',
+                        icon: MobileBackArrowMajor,
+                        onClick: () => window.location.href = "/logout",
                     },
                 ]}
                 action={{
@@ -127,6 +192,39 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                     accessibilityLabel: 'Contact support',
                     onClick: () => this.panToCoordinates(0,0),
                 }}
+            />
+            <Navigation.Section
+                title="Jobs"
+                items={[
+                    {
+                        label: 'Local Jobs',
+                        icon: LocationMajor,
+                        onClick: () => {
+                            this.setState({ jobType: 0 }, () => {
+                                this.updateJobs(this.state.centerLatitude, this.state.centerLongitude, this.state.jobRadius);
+                            });
+                        },
+                    },
+                    {
+                        label: 'My Jobs',
+                        icon: SmileyJoyMajor,
+                        onClick: () => {
+                            this.setState({ jobType: 1 }, () => {
+                                this.updateJobs(this.state.centerLatitude, this.state.centerLongitude, this.state.jobRadius);
+                            });
+                        },
+                    },
+                    {
+                        label: 'Volunteered For',
+                        icon: FlagMajor,
+                        onClick: () => {
+                            this.setState({ jobType: 2 }, () => {
+                                this.updateJobs(this.state.centerLatitude, this.state.centerLongitude, this.state.jobRadius);
+                            });
+                        },
+                    },
+                ]}
+                separator
             />
         </Navigation>
     );
@@ -213,7 +311,7 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                                 width: '100%',
                             }}
                         >
-                            <Heading>{jobs.length} Local Job{jobs.length != 1 ? "s" : ""}</Heading>
+                            <Heading>{jobs.length} {this.jobTitleForType()}{jobs.length != 1 ? "s" : ""}</Heading>
                             <Button
                                 accessibilityLabel="Cancel"
                                 icon={MobileCancelMajor}

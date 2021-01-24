@@ -220,11 +220,19 @@ class Dashboard extends Controller
 
     private function getJobsOwnedByUser($request)
     {
-        $required = ["id"];
+        $required = ["lat", "long"];
         if (Auth::check() && $this->hasParameters($request, $required)) {
-            $jobs = Job::where("owner_id", $request->get("id"));
+            $lat = $request->get("lat");
+            $long = $request->get("long");
 
-            return $this->response(true, ["jobs" => $jobs]);
+            $jobs = Job::where("owner_id", Auth::user()->sub);
+            $jobs = $jobs->selectRaw("*, (6371 * acos(cos(radians({$lat}))
+                                    * cos(radians(`latitude`))
+                                    * cos(radians(`longitude`) - radians({$long}))
+                                    + sin(radians({$lat}))
+                                    * sin(radians(`latitude`)))) AS distance ");
+
+            return $this->response(true, ["jobs" => $jobs->get()]);
         }
 
         return $this->fail("Invalid request.");
@@ -232,15 +240,23 @@ class Dashboard extends Controller
 
     private function getJobsAssignedToUser($request)
     {
-        $required = ["id"];
+        $required = ["lat", "long"];
         if (Auth::check() && $this->hasParameters($request, $required)) {
+            $lat = $request->get("lat");
+            $long = $request->get("long");
+
             $jobs = DB::table("job")
                         ->join("assignment", "assignment.job_id", 'job.id')
-                        ->where("assignment.user_id", "id")
-                        ->select("job.*")
-                        ->get();
+                        ->where("assignment.assignee_id", Auth::user()->sub)
+                        ->select("job.*");
 
-            return $this->response(true, ["jobs" => $jobs]);
+            $jobs = $jobs->selectRaw("*, (6371 * acos(cos(radians({$lat}))
+                        * cos(radians(`latitude`))
+                        * cos(radians(`longitude`) - radians({$long}))
+                        + sin(radians({$lat}))
+                        * sin(radians(`latitude`)))) AS distance ");
+
+            return $this->response(true, ["jobs" => $jobs->get()]);
         }
 
         return $this->fail("Invalid request.");

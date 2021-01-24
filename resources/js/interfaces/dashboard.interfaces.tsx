@@ -25,6 +25,7 @@ export interface IJobDefinition {
     owner_name: string,
     summary: string,
     severity: string,
+    distance: number,
 }
 export interface IJobListProps {
     jobs: IJobDefinition[],
