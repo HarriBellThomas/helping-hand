@@ -27,7 +27,7 @@ class ViewJobModal extends Component<IViewJobModalProps, IViewJobModalState> {
             >
                 <Modal.Section>
                     <TextContainer>
-                        <Heading>{this.props.job.owner_name} has a job for you!</Heading>
+                        <Heading>{this.props.job.owner_name} is asking for help!</Heading>
                         <p>
                             {this.props.job.description}
                         </p>
