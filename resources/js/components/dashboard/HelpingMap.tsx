@@ -87,7 +87,11 @@ class HelpingMap extends Component<IHelpingMapProps, IHelpingMapState> {
                     url={`https://api.mapbox.com/styles/v1/timlaz/ckk9wcq2k2qz217p1nfkcjcni/tiles/256/{z}/{x}/{y}@2x?access_token=${MAPBOX_KEY}`}
                 />
                 {jobMarkers}
-                <Circle center={[this.props.latitude, this.props.longitude]} radius={this.props.radius * 1000} color='#b296e1' interactive={false}/>
+                {
+                    this.props.showCircle ?
+                    <Circle center={[this.props.latitude, this.props.longitude]} radius={this.props.radius * 1000} color='#b3e5fc' interactive={false}/> :
+                    <></>
+                }
             </MapContainer>
         );
     }

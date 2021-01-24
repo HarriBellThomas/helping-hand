@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { IJobDefinition, IJobListProps } from "../../interfaces/dashboard.interfaces";
-import { ResourceItem, ResourceList, TextStyle } from "@shopify/polaris";
+import { Button, ResourceItem, ResourceList, TextStyle } from "@shopify/polaris";
+import { LocationMajor } from "@shopify/polaris-icons";
 
 interface IJobMetadata {
     colour: string,
@@ -37,6 +38,7 @@ class JobList extends Component<IJobListProps, {}> {
                     <div style={{ width: "1rem", height: "1rem", backgroundColor: colour, display: "inline-block", borderRadius: "1rem", marginRight: "1rem" }} />
                     <h3 style={{ lineHeight: "2.8rem", display: "inline-block" }}><TextStyle variation="strong">{job.summary}</TextStyle> ({(Math.round(job.distance * 100) / 100).toFixed(2)}m)</h3>
                 </span>   
+                <div style={{ float: "right" }}><Button size={"slim"} outline={true} onClick={() => this.props.showJob(job)} icon={LocationMajor}></Button></div>
             </ResourceItem>
         );
     }
@@ -44,7 +46,7 @@ class JobList extends Component<IJobListProps, {}> {
     render() {
         const items = this.props.jobs.map((item) => { 
             return { job: item, metadata: this.severityToMetadata(item) } as IJobBundle;
-        });
+        }).sort((a, b) => b.metadata.index - a.metadata.index);
         return (
             <ResourceList 
                 items={items}
