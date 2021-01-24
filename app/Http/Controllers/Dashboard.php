@@ -38,7 +38,7 @@ class Dashboard extends Controller
             case "get-jobs-owned-by-user":
                 return $this->getJobsOwnedByUser($request);
             case "get-jobs-assigned-to-user":
-                return $this->getJobsAssignedToUser($request)
+                return $this->getJobsAssignedToUser($request);
             default:
                 return $this->fail("Route not found");
         }
