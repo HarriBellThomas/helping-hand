@@ -175,6 +175,7 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
         <Navigation location="/">
             <img className="culdesac-logo" src={"/images/culdesac.png"} style={{ margin: "1rem 3rem 1rem 1rem" }} />
             <Navigation.Section
+                title="a"
                 items={[
                     {
                         label: 'Account',
@@ -190,7 +191,7 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                 action={{
                     icon: ConversationMinor,
                     accessibilityLabel: 'Contact support',
-                    onClick: () => this.panToCoordinates(0,0),
+                    onClick: () => this.createJob()
                 }}
             />
             <Navigation.Section
