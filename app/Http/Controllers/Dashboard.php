@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Job;
+use Illuminate\Support\Facades\DB;
 
 class Dashboard extends Controller
 {
@@ -80,6 +81,11 @@ class Dashboard extends Controller
     private function findLocalJobs($request) {
         $required = ["lat", "long", "radius"];
         if (Auth::check() && $this->hasParameters($request, $required)) {
+	    //$jobs = DB::table('jobs')
+	    //        ->select('*', DB::raw('6371 * 2 * ASIN(SQRT(POWER(SIN((37 - abs('. $request->lat .')) * pi()/180 / 2), 2) + COS(37 * pi()/180 ) * COS(abs('. $request->lat .') * pi()/180) * POWER(SIN((-122 - '. $request->long .') * pi()/180 / 2), 2) )) as distance'))
+	    //        ->where('distance', '<', 'radius')
+	    //        ->get();
+	    //return $this->response(true, ["jobs" =>  $jobs]);
             return $this->response(true, [
                 "jobs" => array(
                     [
