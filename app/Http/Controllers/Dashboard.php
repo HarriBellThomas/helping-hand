@@ -145,6 +145,7 @@ class Dashboard extends Controller
 
             // Infer job metadata.
             $job->setAttribute("owner_id", Auth::user()->sub);
+            $job->setAttribute("owner_name", Auth::user()->name);
             $job->setAttribute("created", time());
             $job->setAttribute("status", "pending");
 
