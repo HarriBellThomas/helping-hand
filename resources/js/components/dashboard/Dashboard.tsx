@@ -242,7 +242,7 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
                         }
                     }}
                     i18n={{}}
-                    features={{ newDesignLanguage: true }}
+                    features={{ newDesignLanguage: false }}
                 >
                     <Frame
                         navigation={this.navigationMarkup}
@@ -298,7 +298,7 @@ class Dashboard extends Component<IDashboardProps, IDashboardState> {
 
                     <AddJobModal openModal={this.state.showAddJobModal} onClose={() => {
                         this.setState({ showAddJobModal: false });
-                        // this.updateJobs(this.state);
+                        this.updateJobs(this.state.centerLatitude, this.state.centerLongitude, this.state.jobRadius);
                     }}/>
 
                     <Sheet open={sheetOpen} onClose={() => this.setState({ sheetOpen: false })}>
