@@ -10,6 +10,26 @@ use App\Models\Job;
 use App\Models\Assignment;
 use App\User;
 
+function postCode2Geog($code){
+    $code = strtolower(str_replace(' ','+',$code));
+    $apikey = env("GOOGLE_GEOCODING_KEY", "");
+
+    $url = "https://maps.googleapis.com/maps/api/geocode/json?address={$code}&key={$apikey}";
+    
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $output = curl_exec($ch);
+    curl_close($ch);
+    
+    $data = json_decode($output, true);
+    $lat = $data["results"][0]["geometry"]["location"]["lat"];
+    $long = $data["results"][0]["geometry"]["location"]["lng"];
+    
+    return array("latitude" => $lat, "longitude" => $long);
+   }
+
 class Dashboard extends Controller
 {
     public function api_get(Request $request, $path)
@@ -33,8 +53,8 @@ class Dashboard extends Controller
                 return $this->submitJob($request);
             case "update-job":
                 return $this->updateJob($request);
-            case "update-postcode":
-                return $this->updatePostcode($request);
+            case "update-user-location":
+                return $this->updateUserLocation($request);
             case "get-jobs-owned-by-user":
                 return $this->getJobsOwnedByUser($request);
             case "get-jobs-assigned-to-user":
@@ -91,6 +111,8 @@ class Dashboard extends Controller
                     "name" => $user->name,
                     "picture" => $user->picture,
                     "email" => $user->email,
+                    "longitude" => $user->longitude,
+                    "latitude" => $user->latitude,
                 ]
             ]);
         }
@@ -196,7 +218,7 @@ class Dashboard extends Controller
         return $this->fail("Invalid request.");
     }
 
-    private function updatePostcode($request)
+    private function updateUserLocation($request)
     {
         $required = [
             "id",
@@ -204,8 +226,10 @@ class Dashboard extends Controller
         ];
         if (Auth::check() && $this->hasParameters($request, $required)) {
             $user = User::where("id", $request->id)->first();
+            $coords = postCode2Geog($request->get("postcode"));
 
-            $user->setAttribute("current_postcode", $request->get("postcode"));
+            $user->setAttribute("longitude", $coords["longitude"]);
+            $user->setAttribute("latitude", $coords["latitude"]);
 
             // Save user.
             if ($user->save()) {
